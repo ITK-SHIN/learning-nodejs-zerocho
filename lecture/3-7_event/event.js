@@ -33,7 +33,7 @@ const listener = () => {
   console.log("이벤트 5");
 };
 myEvent.on("event5", listener); // 리스너를 만들고
-myEvent.removeListener("event5", listener); // 리스너를 제거
+myEvent.removeListener("event5", listener); // 이벤트에 연결된 리스너를 하나씩 제거
 myEvent.emit("event5"); // 실행 안 됨
 
 console.log(myEvent.listenerCount("event2")); // 이벤트에 연결된 리스너 개수를 확인합니다.
