@@ -1,0 +1,5 @@
+Front 과정
+
+1. 첫 로딩시 
+window load 이후 getUser 호출 
+/users로 get 호출
