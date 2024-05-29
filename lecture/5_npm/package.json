@@ -1,6 +1,6 @@
 {
-  "name": "npmtest",
-  "version": "0.0.1",
+  "name": "itk-pacakgetest",
+  "version": "0.0.2",
   "description": "hello pacakge.json",
   "main": "index.js",
   "scripts": {
