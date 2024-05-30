@@ -6,6 +6,9 @@ const dotenv = require("dotenv"); // dotenv 모듈을 가져온다.
 const path = require("path");
 
 dotenv.config(); // .env 파일을 읽어서 process.env로 만든다.
+const indexRouter = require("./routes");
+const userRouter = require("./routes/user");
+
 const app = express(); // express 함수를 실행해서 앱을 만든다.
 app.set("port", process.env.PORT || 3000); // 포트 번호를 설정한다.
 
@@ -27,50 +30,15 @@ app.use(
     },
     name: "session-cookie", // 세션 쿠키의 이름을 설정한다.
   })
-); // express-session 미들웨어를 사용한다.
-
-/*=============== multer 실습하기 ========================= */
-const multer = require("multer");
-const fs = require("fs");
-
-try {
-  fs.readdirSync("uploads");
-} catch (error) {
-  console.error("uploads 폴더가 없어 uploads 폴더를 생성합니다.");
-  fs.mkdirSync("uploads");
-}
-// 파일 업로드를 위한 multer 미들웨어를 설정한다.
-const upload = multer({
-  // 파일 저장 방식을 설정
-  storage: multer.diskStorage({
-    // 파일이 저장될 경로를 설정한다.
-    destination(req, file, done) {
-      done(null, "uploads/"); // uploads 폴더에 저장
-    },
-    // 파일명을 설정
-    filename(req, file, done) {
-      const ext = path.extname(file.originalname); // 파일의 확장자를 가져옴
-      done(null, path.basename(file.originalname, ext) + Date.now() + ext); // 파일명을 설정
-    },
-  }),
-  limits: { fileSize: 5 * 1024 * 1024 }, // 파일 크기 제한을 설정 // 5MB
-});
-// GET /upload 요청이 들어오면
-app.get("/upload", (req, res) => {
-  res.sendFile(path.join(__dirname, "multipart.html")); // multipart.html 파일을 응답한다.
-});
-
-// POST /upload 요청이 들어오면
-// single 미들웨어를 사용해서 이미지를 처리한다.
-app.post(
-  "/upload",
-  upload.fields([{ name: "image1" }, { name: "image2" }]),
-  (req, res) => {
-    console.log(req.files, req.body);
-    res.send("ok");
-  }
 );
-/*============================================ */
+
+app.use("/", indexRouter); // 라우터를 등록한다.
+app.use("/user", userRouter); // 라우터를 등록한다.
+
+// 404 처리 미들웨어를 등록한다.
+app.use((req, res, next) => {
+  res.status(404).send("Not Found");
+});
 
 // 모든 요청에 실행되는 미들웨어를 등록.
 app.use((req, res, next) => {
