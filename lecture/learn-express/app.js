@@ -1,8 +1,31 @@
 const express = require("express"); // express 모듈을 가져온다.
+const morgan = require("morgan"); // morgan 모듈을 가져온다.
+const cookieParser = require("cookie-parser"); // cookie-parser 모듈을 가져온다.
+const session = require("express-session"); // express-session 모듈을 가져온다.
+const dotenv = require("dotenv"); // dotenv 모듈을 가져온다.
 const path = require("path");
 
+dotenv.config(); // .env 파일을 읽어서 process.env로 만든다.
 const app = express(); // express 함수를 실행해서 앱을 만든다.
 app.set("port", process.env.PORT || 3000); // 포트 번호를 설정한다.
+
+app.use(morgan("dev")); // 개발 시에만 사용하는 미들웨어이다.
+app.use("/", express.static(path.join(__dirname, "public"))); // static 미들웨어를 사용한다.
+app.use(express.json()); // body-parser 미들웨어를 사용한다.
+app.use(express.urlencoded({ extended: false })); // body-parser 미들웨어를 사용한다.
+app.use(cookieParser(process.env.COOKIE_SECRET)); // cookie-parser 미들웨어를 사용한다.
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+    },
+    name: "session-cookie",
+  })
+); // express-session 미들웨어를 사용한다.
 
 // 모든 요청에 실행되는 미들웨어를 등록한다.
 app.use((req, res, next) => {
