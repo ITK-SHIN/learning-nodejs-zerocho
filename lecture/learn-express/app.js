@@ -43,6 +43,8 @@ app.use((req, res, next) => {
 // 모든 요청에 실행되는 미들웨어를 등록.
 app.use((req, res, next) => {
   console.log("모든 요청에 다 실행된다");
+  const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
+  error.status = 404;
   next(); // 다음 미들웨어로 넘어간다.
 });
 
@@ -62,8 +64,10 @@ app.get(
 
 // 에러 처리 미들웨어를 등록한다.
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).send(err.message);
+  res.locals.message = err.message;
+  res.locals.error = process.env.NODE_ENV !== "production" ? err : {};
+  res.status(err.status || 500);
+  res.render("error");
 });
 
 // 서버를 실행한다.
