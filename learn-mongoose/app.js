@@ -4,6 +4,9 @@ const morgan = require("morgan"); // 로깅 미들웨어
 const nunjucks = require("nunjucks"); // 템플릿 엔진
 
 const connect = require("./schemas");
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+const commentsRouter = require("./routes/comments");
 
 const app = express();
 app.set("port", process.env.PORT || 3002);
@@ -20,6 +23,10 @@ app.use(morgan("dev")); // 개발 시 morgan 미들웨어를 사용하여 요청
 app.use(express.static(path.join(__dirname, "public"))); // 정적 파일 제공
 app.use(express.json()); // JSON 형식의 데이터를 받을 수 있게 함
 app.use(express.urlencoded({ extended: false })); // form 형식의 데이터를 받을 수 있게 함
+
+app.use("/", indexRouter);
+app.use("/users", usersRouter);
+app.use("/comments", commentsRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
