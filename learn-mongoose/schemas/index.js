@@ -7,8 +7,9 @@ const connect = () => {
   }
 
   // 2️⃣  몽고디비 연결
-
-  mongoose
+  // mongoose.connect 메소드는 Promise를 반환
+  mongoose // 몽구스와 몽고디비 연결
+    // 몽고디비 URL
     .connect("mongodb://ITKSangwoo:dnsdidehd!2@localhost:27017/admin", {
       dbName: "nodejs", // 실제 사용할 데이터베이스
       useNewUrlParser: true, // 현재 URL 스트링 파서가 deprecated 되었으므로 이를 대체하기 위한 옵션
