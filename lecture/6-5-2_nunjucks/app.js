@@ -49,10 +49,9 @@ app.use((req, res, next) => {
 
 // 모든 요청에 실행되는 미들웨어를 등록.
 app.use((req, res, next) => {
-  console.log("모든 요청에 다 실행된다");
   const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
   error.status = 404;
-  next(); // 다음 미들웨어로 넘어간다.
+  next(error); // 다음 미들웨어로 넘어간다.
 });
 
 // GET 요청에만 실행되는 미들웨어를 등록.
