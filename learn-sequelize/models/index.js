@@ -1,50 +1,27 @@
-"use strict";
+const Sequelize = require("sequelize");
+const User = require("./user");
+const Comment = require("./comment");
 
-const fs = require("fs"); // 파일 시스템 모듈
-const path = require("path"); // 경로 관련 모듈
-const Sequelize = require("sequelize"); // 시퀄라이즈 패키지
-const process = require("process"); // process.env.NODE_ENV를 사용하기 위해 추가
-const basename = path.basename(__filename); // 현재 파일명을 담는다.
-const env = process.env.NODE_ENV || "development"; // NODE_ENV 환경변수가 설정되어 있지 않다면 development를 사용
-const config = require(__dirname + "/../config/config.json")[env]; // config.json 파일을 불러온다.
+const env = process.env.NODE_ENV || "development"; // NODE_ENV 환경변수가 설정되어 있지 않다면 development를 기본값으로 사용
+const config = require("../config/config")[env]; // config/config.json 파일에서 환경변수에 따른 설정을 불러옴
 const db = {}; // db 객체 생성
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config); // 환경변수로 연결
-} else {
-  sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config
-  );
-}
+const sequelize = new Sequelize( // 시퀄라이즈 객체 생성
+  config.database, // 데이터베이스 이름
+  config.username, // 유저 이름
+  config.password, // 비밀번호
+  config // 환경변수에 따른 설정
+);
 
-fs.readdirSync(__dirname)
-  .filter((file) => {
-    return (
-      file.indexOf(".") !== 0 &&
-      file !== basename &&
-      file.slice(-3) === ".js" &&
-      file.indexOf(".test.js") === -1
-    );
-  })
-  .forEach((file) => {
-    const model = require(path.join(__dirname, file))(
-      sequelize,
-      Sequelize.DataTypes
-    );
-    db[model.name] = model;
-  });
+db.sequelize = sequelize; // db 객체에 시퀄라이즈 객체를 넣음
 
-Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
+db.User = User; // db 객체에 User 모델을 넣음
+db.Comment = Comment; // db 객체에 Comment 모델을 넣음
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+User.initiate(sequelize); // User 모델의 init 메서드를 호출
+Comment.initiate(sequelize); // Comment 모델의 init 메서드를 호출
 
-module.exports = db;
+User.associate(db); //  User, Comment 모델의 associate 메서드를 호출
+Comment.associate(db); // User, Comment 모델의 associate 메서드를 호출
+
+module.exports = db; // db 객체를 모듈로 사용
