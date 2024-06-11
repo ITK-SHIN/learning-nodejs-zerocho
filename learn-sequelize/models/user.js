@@ -35,7 +35,7 @@ class User extends Sequelize.Model {
       // 옵션 설정
       {
         sequelize, // 첫 번째 인수: sequelize 객체
-        timestamps: false, // 두 번째 인수: 옵션
+        timestamps: false, // 두 번째 인수: 옵션 설정 (timestamps → 생성일자, 수정일자 컬럼을 자동 생성)
         underscored: false, // 카멜케이스로 변환
         modelName: "User", // 세 번째 인수: 모델 이름
         tableName: "users", //  네 번째 인수: 테이블 이름

@@ -4,6 +4,9 @@ const morgan = require("morgan"); // 요청과 응답에 대한 정보를 콘솔
 const nunjucks = require("nunjucks"); // 템플릿 엔진
 
 const { sequelize } = require("./models"); //require('./models/index.js')와 같다. index.js는 생략 가능
+const indexRouter = require("./routes"); // index.js는 생략 가능
+const usersRouter = require("./routes/users");
+const commentsRouter = require("./routes/comments");
 
 const app = express(); // express 객체 생성
 app.set("port", process.env.PORT || 3001); // PORT 환경변수가 설정되어 있지 않다면 3001을 사용
@@ -27,6 +30,10 @@ app.use(morgan("dev")); // 개발 시 사용
 app.use(express.static(path.join(__dirname, "public"))); // 정적 파일 제공
 app.use(express.json()); // JSON 데이터 처리
 app.use(express.urlencoded({ extended: false })); // form 데이터 처리
+
+app.use("/", indexRouter);
+app.use("/users", usersRouter);
+app.use("/comments", commentsRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
