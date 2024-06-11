@@ -3,9 +3,11 @@ const Sequelize = require("sequelize"); // 시퀄라이즈 패키지 불러오�
 // 시퀄라이즈의 Model을 상속받는 User 모델 정의
 class User extends Sequelize.Model {
   // static 메서드로 init 메서드 정의
-  static initialize(sequelize) {
+  static initiate(sequelize) {
     // init 메서드로 모델의 속성 정의
     User.init(
+      // 첫 번째 인수 → 테이블 컬럼에 대한 설정
+      // 두 번째 인수 → 테이블 자체에 대한 설정
       {
         name: {
           type: Sequelize.STRING(20),
@@ -20,6 +22,10 @@ class User extends Sequelize.Model {
           type: Sequelize.BOOLEAN, // true, false
           allowNull: true,
         },
+        comment: {
+          type: Sequelize.TEXT,
+          allowNull: true,
+        },
         created_at: {
           type: Sequelize.DATE, // DATETIME
           allowNull: false,
@@ -30,7 +36,7 @@ class User extends Sequelize.Model {
       {
         sequelize, // 첫 번째 인수: sequelize 객체
         timestamps: false, // 두 번째 인수: 옵션
-        underscored: false, // 카멜케이스 대신 스네이크케이스 사용
+        underscored: false, // 카멜케이스로 변환
         modelName: "User", // 세 번째 인수: 모델 이름
         tableName: "users", //  네 번째 인수: 테이블 이름
         paranoid: false, // 다섯 번째 인수: true로 설정하면 deletedAt 컬럼이 생성됨
@@ -40,7 +46,9 @@ class User extends Sequelize.Model {
     );
   }
 
-  static associate(db) {} // 다른 모델과의 관계를 정의
+  static associate(db) {
+    db.User.hasMany(db.Comment, { foreignKey: "commenter", sourceKey: "id" });
+  } // 다른 모델과의 관계를 정의
 }
 
 module.exports = User; // User 모델을 모듈로 사용

@@ -1,7 +1,7 @@
 const express = require("express");
-const path = require("path");
-const morgan = require("morgan");
-const nunjucks = require("nunjucks");
+const path = require("path"); // 경로 관련 기능 제공
+const morgan = require("morgan"); // 요청과 응답에 대한 정보를 콘솔에 기록
+const nunjucks = require("nunjucks"); // 템플릿 엔진
 
 const { sequelize } = require("./models"); //require('./models/index.js')와 같다. index.js는 생략 가능
 
@@ -14,8 +14,8 @@ nunjucks.configure("views", {
   watch: true, // 파일이 변경될 때 템플릿 엔진을 다시 로드
 });
 
-sequelize
-  .sync({ force: false })
+sequelize // 시퀄라이즈 객체를 통해 데이터베이스 연결
+  .sync({ force: false }) // force: true로 설정하면 서버 실행 시마다 테이블을 재생성 (기존 데이터 삭제)
   .then(() => {
     console.log("데이터베이스 연결 성공");
   })

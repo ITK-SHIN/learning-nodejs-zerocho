@@ -5,6 +5,8 @@ class Comment extends Sequelize.Model {
   static initiate(sequelize) {
     // init 메서드로 모델의 속성 정의
     Comment.init(
+      // 첫 번째 인수 → 테이블 컬럼에 대한 설정
+      // 두 번째 인수 → 테이블 자체에 대한 설정
       {
         comment: {
           type: Sequelize.STRING(100),
