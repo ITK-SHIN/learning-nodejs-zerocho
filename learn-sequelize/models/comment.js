@@ -33,7 +33,7 @@ class Comment extends Sequelize.Model {
 
   // 다른 모델과의 관계를 정의
   static associate(db) {
-    // Comment 모델은 User 모델에 속한다.
+    // Comment 모델은 User 모델에 속한다. ->   USER 모델 : COMMENT 모델 = 1 : N (1명의 사용자는 여러 개의 댓글을 작성할 수 있다.)
     // Comment 모델은 User 모델의 id를 외래키로 가진다.
     // Comment 모델은 User 모델의 commenter 속성을 참조한다.
     // Comment 모델은 User 모델의 id 속성을 참조한다.

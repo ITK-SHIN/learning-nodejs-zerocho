@@ -36,7 +36,7 @@ class User extends Sequelize.Model {
       {
         sequelize, // 첫 번째 인수: sequelize 객체
         timestamps: false, // 두 번째 인수: 옵션 설정 (timestamps → 생성일자, 수정일자 컬럼을 자동 생성)
-        underscored: false, // 카멜케이스로 변환
+        underscored: false, // 카멜케이스로 변환 // false: created_at, true: createdat
         modelName: "User", // 세 번째 인수: 모델 이름
         tableName: "users", //  네 번째 인수: 테이블 이름
         paranoid: false, // 다섯 번째 인수: true로 설정하면 deletedAt 컬럼이 생성됨
@@ -48,7 +48,7 @@ class User extends Sequelize.Model {
 
   static associate(db) {
     db.User.hasMany(db.Comment, { foreignKey: "commenter", sourceKey: "id" });
-  } // 다른 모델과의 관계를 정의
+  } // 다른 모델과의 관계를 정의 ->  USER 모델 : COMMENT 모델 = 1 : N (1명의 사용자는 여러 개의 댓글을 작성할 수 있다.)
 }
 
 module.exports = User; // User 모델을 모듈로 사용

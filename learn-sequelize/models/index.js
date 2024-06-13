@@ -5,7 +5,8 @@ const Comment = require("./comment");
 // NODE_ENV 환경변수가 설정되어 있지 않다면 development를 기본값으로 사용
 const env = process.env.NODE_ENV || "development";
 
-// config/config.json 파일에서 환경변수에 따른 설정을 불러옴
+// config/config.json 파일에서 환경변수에 따른 설정을 불러옴 (development, test, production)
+// config.json 파일은 시퀄라이즈 패키지가 자동으로 생성 (시퀄라이즈 CLI)
 const config = require("../config/config")[env];
 const db = {}; // db 객체 생성
 
@@ -21,6 +22,7 @@ db.sequelize = sequelize; // db 객체에 시퀄라이즈 객체를 넣음
 db.User = User; // db 객체에 User 모델을 넣음
 db.Comment = Comment; // db 객체에 Comment 모델을 넣음
 
+// 모델.init이 실행되어야 테이블이 모델로 연결된다.
 User.initiate(sequelize); // User 모델의 init 메서드를 호출
 Comment.initiate(sequelize); // Comment 모델의 init 메서드를 호출
 

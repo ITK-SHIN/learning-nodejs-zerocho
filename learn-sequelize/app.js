@@ -17,6 +17,7 @@ nunjucks.configure("views", {
   watch: true, // 파일이 변경될 때 템플릿 엔진을 다시 로드
 });
 
+//sync 메서드 :  Sequelize를 사용하여 데이터베이스와 동기화하는 메서드.
 sequelize // 시퀄라이즈 객체를 통해 데이터베이스 연결
   .sync({ force: false }) // force: true로 설정하면 서버 실행 시마다 테이블을 재생성 (기존 데이터 삭제)
   .then(() => {
@@ -31,7 +32,7 @@ app.use(express.static(path.join(__dirname, "public"))); // 정적 파일 제공
 app.use(express.json()); // JSON 데이터 처리
 app.use(express.urlencoded({ extended: false })); // form 데이터 처리
 
-app.use("/", indexRouter);
+app.use("/", indexRouter); // 라우터 등록
 app.use("/users", usersRouter);
 app.use("/comments", commentsRouter);
 
@@ -41,10 +42,11 @@ app.use((req, res, next) => {
   next(error); // 에러 처리 미들웨어로 전달
 });
 
+// 에러 처리 미들웨어
 app.use((err, req, res, next) => {
-  res.locals.message = err.message;
-  res.locals.error = process.env.NODE_ENV != "production" ? err : {};
-  res.status(err.status || 500);
+  res.locals.message = err.message; // 에러 메시지를 저장
+  res.locals.error = process.env.NODE_ENV != "production" ? err : {}; // 개발 환경이 아닌 경우 에러 스택 추적 X (보안)
+  res.status(err.status || 500); // 상태 코드를 지정하거나 500을 기본값으로 사용
   res.render("error");
 });
 

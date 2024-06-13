@@ -95,6 +95,7 @@ async function getComment(id) {
     console.error(err);
   }
 }
+
 // 사용자 등록 시
 document.getElementById("user-form").addEventListener("submit", async (e) => {
   e.preventDefault();
